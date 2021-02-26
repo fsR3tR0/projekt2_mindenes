@@ -1,0 +1,10 @@
+21:47:56 **** Incremental Build of configuration Debug for project 17n_stepper_servos ****
+make -j4 all 
+arm-none-eabi-size   17n_stepper_servos.elf 
+   text	   data	    bss	    dec	    hex	filename
+   7512	     20	   1644	   9176	   23d8	17n_stepper_servos.elf
+Finished building: default.size.stdout
+ 
+
+21:47:56 Build Finished. 0 errors, 0 warnings. (took 505ms)
+

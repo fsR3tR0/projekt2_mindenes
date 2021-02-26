@@ -1,0 +1,49 @@
+14:28:08 **** Incremental Build of configuration Debug for project projekt2_servotest ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -DDEBUG -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:120:18: warning: pointer targets in passing argument 2 of 'ftoa' differ in signedness [-Wpointer-sign]
+    ftoa(tmp_dma, buffer, 2);
+                  ^~~~~~
+In file included from ../Core/Src/main.c:30:0:
+../Core/Inc/functions.h:15:6: note: expected 'char *' but argument is of type 'uch * {aka unsigned char *}'
+ void ftoa(float n, char *res, int afterpoint);
+      ^~~~
+../Core/Src/main.c:121:15: warning: pointer targets in passing argument 1 of 'LCD_string' differ in signedness [-Wpointer-sign]
+    LCD_string(buffer);
+               ^~~~~~
+In file included from ../Core/Src/main.c:29:0:
+../Core/Inc/lcd.h:23:6: note: expected 'char *' but argument is of type 'uch * {aka unsigned char *}'
+ void LCD_string(char *str);
+      ^~~~~~~~~~
+../Core/Src/main.c:123:18: warning: pointer targets in passing argument 2 of 'ftoa' differ in signedness [-Wpointer-sign]
+    ftoa(tmp_dma, buffer, 2);
+                  ^~~~~~
+In file included from ../Core/Src/main.c:30:0:
+../Core/Inc/functions.h:15:6: note: expected 'char *' but argument is of type 'uch * {aka unsigned char *}'
+ void ftoa(float n, char *res, int afterpoint);
+      ^~~~
+../Core/Src/main.c:125:15: warning: pointer targets in passing argument 1 of 'LCD_string' differ in signedness [-Wpointer-sign]
+    LCD_string(buffer);
+               ^~~~~~
+In file included from ../Core/Src/main.c:29:0:
+../Core/Inc/lcd.h:23:6: note: expected 'char *' but argument is of type 'uch * {aka unsigned char *}'
+ void LCD_string(char *str);
+      ^~~~~~~~~~
+arm-none-eabi-gcc -o "projekt2_servotest.elf" @"objects.list"   -mcpu=cortex-m3 -T"/root/Documents/stm32/projektek/workspace_2/projekt2_servotest/STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="projekt2_servotest.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: projekt2_servotest.elf
+ 
+arm-none-eabi-objdump -h -S  projekt2_servotest.elf  > "projekt2_servotest.list"
+arm-none-eabi-objcopy  -O binary  projekt2_servotest.elf  "projekt2_servotest.bin"
+arm-none-eabi-size   projekt2_servotest.elf 
+   text	   data	    bss	    dec	    hex	filename
+  24484	    124	   1844	  26452	   6754	projekt2_servotest.elf
+Finished building: default.size.stdout
+Finished building: projekt2_servotest.bin
+ 
+ 
+Finished building: projekt2_servotest.list
+ 
+
+14:28:10 Build Finished. 0 errors, 4 warnings. (took 1s.52ms)
+

@@ -1,0 +1,10 @@
+21:21:31 **** Incremental Build of configuration Debug for project proba_projekt2hoz ****
+make -j4 all 
+arm-none-eabi-size   proba_projekt2hoz.elf 
+   text	   data	    bss	    dec	    hex	filename
+   4616	     20	   1572	   6208	   1840	proba_projekt2hoz.elf
+Finished building: default.size.stdout
+ 
+
+21:21:32 Build Finished. 0 errors, 0 warnings. (took 439ms)
+
