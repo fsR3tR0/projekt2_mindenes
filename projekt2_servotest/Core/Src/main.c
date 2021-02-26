@@ -19,6 +19,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "tim.h"
 #include "gpio.h"
 
@@ -67,6 +69,8 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 	uch buffer[20];
+	u32 dma_data[2] = {0,0};
+	float tmp_dma = 0.0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -87,13 +91,17 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
   HAL_TIM_Base_Start_IT(&htim2);
-  LCD_init(1, 1);
+  HAL_ADC_Start_DMA(&hadc1, dma_data, 2);
+  LCD_init(1,1);
 
   /* USER CODE END 2 */
 
@@ -106,16 +114,39 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  LCD_goto(1,0);
+	  //strtoINT(dma_data[0], sizeof(dma_data[0]));
+	  tmp_dma = ((3.3/4096)*dma_data[0]);
+	  ftoa(tmp_dma, buffer, 2);
+	  LCD_string(buffer);
+	  tmp_dma = ((3.3/4096)*dma_data[1]);
+	  ftoa(tmp_dma, buffer, 2);
+	  LCD_string(" ");
+	  LCD_string(buffer);
+
 	  for(uint16_t j = 25; j<= 125; j += 5){
 		  htim1.Instance -> CCR1 = j;
 		  htim1.Instance -> CCR2 = j;
+		  htim1.Instance -> CCR3 = j;
+		  LCD_goto(0,0);
+		  LCD_string("    ");
 		  LCD_goto(0,0);
 		  strtoINT(j,sizeof(j));
 		  HAL_Delay(2000);
 	  }
+
+
+	  htim1.Instance -> CCR1 = 25;
+	  htim1.Instance -> CCR2 = 25;
+	  htim1.Instance -> CCR3 = 25;
+	  HAL_Delay(2000);
 	  htim1.Instance -> CCR1 = 75;
+	  htim1.Instance -> CCR2 = 75;
+	  htim1.Instance -> CCR3 = 75;
 	  HAL_Delay(2000);
 	  htim1.Instance -> CCR1 = 125;
+	  htim1.Instance -> CCR2 = 125;
+	  htim1.Instance -> CCR3 = 125;
 	  HAL_Delay(2000);
 	  //htim1.Instance -> CCR = 125;
 
@@ -131,6 +162,7 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
@@ -155,6 +187,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }
