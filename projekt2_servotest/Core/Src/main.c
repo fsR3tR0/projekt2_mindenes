@@ -24,7 +24,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd.h"
+#include "functions.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -65,7 +66,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uch buffer[20];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -90,12 +91,15 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
   HAL_TIM_Base_Start_IT(&htim2);
+  LCD_init(1, 1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  LCD_test();
   while (1)
   {
 	  HAL_GPIO_TogglePin(led_panel_GPIO_Port, led_panel_Pin);
@@ -104,12 +108,16 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  for(uint16_t j = 25; j<= 125; j += 5){
 		  htim1.Instance -> CCR1 = j;
+		  htim1.Instance -> CCR2 = j;
+		  LCD_goto(0,0);
+		  strtoINT(j,sizeof(j));
 		  HAL_Delay(2000);
 	  }
 	  htim1.Instance -> CCR1 = 75;
 	  HAL_Delay(2000);
 	  htim1.Instance -> CCR1 = 125;
 	  HAL_Delay(2000);
+	  //htim1.Instance -> CCR = 125;
 
   }
   /* USER CODE END 3 */
